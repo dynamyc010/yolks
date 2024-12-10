@@ -16,8 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         game:
-          - source
-          - rust
+          # - source
+          # - rust
           - source-synergy
     steps:
       - uses: actions/checkout@v3

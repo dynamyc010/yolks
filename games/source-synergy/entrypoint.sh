@@ -56,12 +56,29 @@ fi
 ## if auto_update is not set or to 1 update
 if [ -z ${AUTO_UPDATE} ] || [ "${AUTO_UPDATE}" == "1" ]; then
     # Update Synergy Server
-    ./steamcmd/steamcmd.sh +force_install_dir /home/container/Synergy +login ${STEAM_USER} +app_update 17520 +quit
-    ./steamcmd/steamcmd.sh +force_install_dir /home/container/Half-Life\ 2 +login ${STEAM_USER} +app_update 220 +quit
+    ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Synergy +login ${STEAM_USER} +app_update 17520 validate +quit || FAILED_UPDATE=true
+    if [ -z ${FAILED_UPDATE} ]; then
+        ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Half-Life\ 2 +login ${STEAM_USER} +app_update 220 validate +quit || FAILED_UPDATE=true
     fi
-
 else
     echo -e "Not updating game server as auto update was set to 0. Starting Server"
+fi
+
+## We failed to update... :(
+if ["${FAILED_UPDATE}" == "true"]; then
+    echo -e "Failed to update server... \n"
+    if [ "${STEAM_USER}" == "anonymous" || "${STEAM_PASS}" == ""} ]; then
+        echo -e "no proper credentials; giving up and starting server.\n"
+    else
+        # echo -e "user set to ${STEAM_USER}\n"
+        echo -e "attempting to use given credentials; be sure to update your Auth code!\n"
+        ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Synergy +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update 17520 validate +quit || FAILED_UPDATE_2=true
+        if [ -z ${FAILED_UPDATE_2} ]; then
+            ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Half-Life\ 2 +login ${STEAM_USER} +app_update 220 validate +quit
+        else
+            echo -e "Failed again; giving up and starting server.\n"
+        fi
+    fi
 fi
 
 # Display the command we're running in the output, and then execute it with the env

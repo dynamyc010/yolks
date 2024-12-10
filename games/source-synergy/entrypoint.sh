@@ -54,7 +54,7 @@ else
 fi
 
 ## if auto_update is not set or to 1 update
-if [ -z ${AUTO_UPDATE} ] || [ "${AUTO_UPDATE}" == "1" ]; then
+if [ -z "${AUTO_UPDATE}" ] || [ "${AUTO_UPDATE}" == "1" ]; then
     # Update Synergy Server
     ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Synergy +login ${STEAM_USER} +app_update 17520 validate +quit || FAILED_UPDATE="1"
     if [ -z ${FAILED_UPDATE} ]; then
@@ -73,7 +73,7 @@ if ["${FAILED_UPDATE}" == "1"]; then
         # echo -e "user set to ${STEAM_USER}\n"
         echo -e "attempting to use given credentials; be sure to update your Auth code!\n"
         ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Synergy +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update 17520 validate +quit || FAILED_UPDATE_2="1"
-        if [ -z ${FAILED_UPDATE_2} ]; then
+        if [ -z "${FAILED_UPDATE_2}" ]; then
             ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Half-Life\ 2 +login ${STEAM_USER} +app_update 220 validate +quit
         else
             echo -e "Failed again; giving up and starting server.\n"

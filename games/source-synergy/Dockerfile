@@ -20,11 +20,11 @@
 # SOFTWARE.
 #
 
-FROM        --platform=$TARGETOS/$TARGETARCH debian:stable-slim
+FROM        --platform=$TARGETOS/$TARGETARCH debian:bullseye-slim
 
-LABEL       author="Matthew Penner" maintainer="matthew@pterodactyl.io"
+LABEL       author="dynamyc; Matthew Penner" maintainer="dynamyc@dynamyc.me; matthew@pterodactyl.io"
 
-LABEL       org.opencontainers.image.source="https://github.com/pterodactyl/yolks"
+LABEL       org.opencontainers.image.source="https://github.com/dynamyc010/yolks"
 LABEL       org.opencontainers.image.licenses=MIT
 
 ENV         DEBIAN_FRONTEND=noninteractive

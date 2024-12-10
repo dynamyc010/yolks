@@ -54,7 +54,7 @@ else
 fi
 
 ## if auto_update is not set or to 1 update
-if [ -z ${AUTO_UPDATE} ] || [ "${AUTO_UPDATE}" == "1" ]; then
+if [ -z ${AUTO_UPDATE} ] || [ $AUTO_UPDATE == "1" ]; then
     # Update Synergy Server
     ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Synergy +login ${STEAM_USER} +app_update 17520 validate +quit || FAILED_UPDATE=1
     if [ -z "${FAILED_UPDATE}" ]; then
@@ -67,7 +67,7 @@ fi
 ## We failed to update... :(
 if [[ ${FAILED_UPDATE} -eq 1 ]]; then
     echo -e "failed to update server... \n"
-    if [ "${STEAM_USER}" == "anonymous" || "${STEAM_PASS}" == ""} ]; then
+    if [[ $STEAM_USER == "anonymous" ] || [ $STEAM_PASS == ""]]; then
         echo -e "no proper credentials; giving up and starting server.\n"
     else
         # echo -e "user set to ${STEAM_USER}\n"

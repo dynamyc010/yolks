@@ -67,6 +67,7 @@ if [ -z ${AUTO_UPDATE} ] || [ "${AUTO_UPDATE}" == "1" ]; then
         UPDATE_STATUS=$?
     fi
 else
+    UPDATE_STATUS=0
     echo -e "Not updating game server as auto update was set to 0. Starting Server"
 fi
 

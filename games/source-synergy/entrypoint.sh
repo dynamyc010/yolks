@@ -43,18 +43,18 @@ PARSED=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g' | eval echo "$(cat
 
 ## just in case someone removed the defaults.
 if [ "${STEAM_USER}" == "" ]; then
-    echo -e "steam user is not set.\n"
-    echo -e "Using anonymous user.\n"
-    echo -e "!! THIS WILL LIKELY FAIL AS ANONYMOUS DOESN'T HAVE ACCESS TO THE RIGHT LICENSES !!\n"
+    echo -e "steam user is not set."
+    echo -e "Using anonymous user."
+    echo -e "!! THIS WILL LIKELY FAIL AS ANONYMOUS DOESN'T HAVE ACCESS TO THE RIGHT LICENSES !!"
     echo -e "(or HL2, for that matter)\n"
     STEAM_USER=anonymous
 else
-    echo -e "user set to ${STEAM_USER}\n"
+    echo -e "user set to ${STEAM_USER}"
     echo -e "attempting to use cached details; might fail, but i'll try my best!\n"
 fi
 
 ## if auto_update is not set or to 1 update
-if [ -z ${AUTO_UPDATE} ] || [ $AUTO_UPDATE == "1" ]; then
+if [ -z ${AUTO_UPDATE} ] || [ "${AUTO_UPDATE}" == "1" ]; then
     # Update Synergy Server
     ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Synergy +login ${STEAM_USER} +app_update 17520 validate +quit || FAILED_UPDATE=1
     if [ -z "${FAILED_UPDATE}" ]; then
@@ -66,17 +66,17 @@ fi
 
 ## We failed to update... :(
 if [[ ${FAILED_UPDATE} -eq 1 ]]; then
-    echo -e "failed to update server... \n"
-    if [[ "{$STEAM_USER}" == "anonymous" ] || [ "${STEAM_PASS}" == ""]]; then
+    echo -e "failed to update server... "
+    if [ "$STEAM_USER" == "anonymous" ] || [ "$STEAM_PASS" == "" ]; then
         echo -e "no proper credentials; giving up and starting server.\n"
     else
         # echo -e "user set to ${STEAM_USER}\n"
-        echo -e "attempting to use given credentials; be sure to update your Auth code!\n"
+        echo -e "attempting to use given credentials; be sure to update your Auth code if needed!\n"
         ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Synergy +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update 17520 validate +quit || FAILED_UPDATE_2=1
         if [ -z "${FAILED_UPDATE_2}" ]; then
             ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Half-Life\ 2 +login ${STEAM_USER} +app_update 220 validate +quit
         else
-            echo -e "Failed again; giving up and starting server.\n"
+            echo -e "failed again; giving up and starting server.\n"
         fi
     fi
 fi

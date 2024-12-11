@@ -48,6 +48,8 @@ if [ "${STEAM_USER}" == "" ]; then
     echo -e "!! THIS WILL LIKELY FAIL AS ANONYMOUS DOESN'T HAVE ACCESS TO THE RIGHT LICENSES !!"
     echo -e "(or HL2, for that matter)\n"
     STEAM_USER=anonymous
+    STEAM_PASS=""
+    STEAM_AUTH=""
 else
     echo -e "user set to ${STEAM_USER}"
     echo -e "attempting to use cached details; might fail, but i'll try my best!\n"
@@ -56,16 +58,16 @@ fi
 ## if auto_update is not set or to 1 update
 if [ -z ${AUTO_UPDATE} ] || [ "${AUTO_UPDATE}" == "1" ]; then
     # Update Synergy Server
-    ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Synergy +login ${STEAM_USER} +app_update 17520 validate +quit || FAILED_UPDATE=1
+    ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Synergy +login ${STEAM_USER} +app_update 17520 validate +quit || FAILED_UPDATE="1"
     if [ -z "${FAILED_UPDATE}" ]; then
-        ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Half-Life\ 2 +login ${STEAM_USER} +app_update 220 validate +quit || FAILED_UPDATE=1
+        ./steamcmd/steamcmd.sh +@NoPromptForPassword 1 +@ShutdownOnFailedCommand 1 +force_install_dir /home/container/Half-Life\ 2 +login ${STEAM_USER} +app_update 220 validate +quit || FAILED_UPDATE="1"
     fi
 else
     echo -e "Not updating game server as auto update was set to 0. Starting Server"
 fi
 
 ## We failed to update... :(
-if [[ ${FAILED_UPDATE} -eq 1 ]]; then
+if [ "$FAILED_UPDATE" == "1" ]; then
     echo -e "failed to update server... "
     if [ "$STEAM_USER" == "anonymous" ] || [ "$STEAM_PASS" == "" ]; then
         echo -e "no proper credentials; giving up and starting server.\n"

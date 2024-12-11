@@ -67,7 +67,7 @@ fi
 ## We failed to update... :(
 if [[ ${FAILED_UPDATE} -eq 1 ]]; then
     echo -e "failed to update server... \n"
-    if [[ $STEAM_USER == "anonymous" ] || [ $STEAM_PASS == ""]]; then
+    if [[ "{$STEAM_USER}" == "anonymous" ] || [ "${STEAM_PASS}" == ""]]; then
         echo -e "no proper credentials; giving up and starting server.\n"
     else
         # echo -e "user set to ${STEAM_USER}\n"

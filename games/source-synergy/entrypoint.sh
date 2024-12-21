@@ -90,11 +90,12 @@ if [ "$UPDATE_STATUS" -eq 5 ]; then
 fi
 
 # Workaround for the stupid sound missing bug
-echo -e "applying workaround for sound..."
-rm -f /home/container/Synergy/bin/libtier0.so
-ln -s /home/container/Synergy/bin/libtier0_srv.so /home/container/Synergy/bin/libtier0.so
-rm -f /home/container/Synergy/bin/libvstdlib.so
-ln -s /home/container/Synergy/bin/libvstdlib_srv.so /home/container/Synergy/bin/libvstdlib.so
+# echo -e "applying workaround for sound..."
+# rm -f /home/container/Synergy/bin/libtier0.so
+# ln -s /home/container/Synergy/bin/libtier0_srv.so /home/container/Synergy/bin/libtier0.so
+# rm -f /home/container/Synergy/bin/libvstdlib.so
+# ln -s /home/container/Synergy/bin/libvstdlib_srv.so /home/container/Synergy/bin/libvstdlib.so
+## FIXED WITH DECEMBER 17 PATCH (MAYBE)
 
 # Display the command we're running in the output, and then execute it with the env
 # from the container itself.
